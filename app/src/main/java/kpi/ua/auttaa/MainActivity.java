@@ -33,13 +33,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         // There is floating actionButton initialization
-        FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.start_alarm);
-        floatingActionButton.setColor(getResources().getColor(R.color.pink_900));
-        floatingActionButton.setDrawable(getResources().getDrawable(android.R.drawable.ic_menu_add));
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton alarmFloatingButton = (FloatingActionButton) findViewById(R.id.button_alarm);
+        alarmFloatingButton.setColor(getResources().getColor(R.color.pink_900));
+        alarmFloatingButton.setDrawable(getResources().getDrawable(android.R.drawable.ic_menu_add));
+        alarmFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "LOLOLOLO", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "AlarmButton clicked", Toast.LENGTH_SHORT).show();
+                //TODO: Send ALARM NOW!!!!
             }
         });
 
