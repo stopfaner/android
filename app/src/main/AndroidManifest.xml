@@ -61,17 +61,13 @@
                 android:value="kpi.ua.auttaa.MainActivity" />
         </activity>
         <activity
-            android:name=".PreferencesActivity"
-            android:parentActivityName=".MainActivity"/>
-
-        <service android:enabled="true" android:name="kpi.ua.auttaa.update.AuttaaUpdateService"/>
-        <receiver android:name="kpi.ua.auttaa.update.AuttaaAlarmReciever">
-            <intent-filter>
-                <action
-                    android:name="kpi.ua.auttaa.update.ACTION_UPDATE_AUTTAA"
-                    />
-            </intent-filter>
-        </receiver>
+            android:name=".MyActivity"
+            android:label="@string/title_activity_my" >
+        </activity>
+        <activity
+            android:name=".AlertFull"
+            android:label="@string/title_activity_alert_full" >
+        </activity>
     </application>
 
 </manifest>

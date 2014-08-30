@@ -11,6 +11,8 @@
     <string name="title_activity_alarm">Alarm</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_my">MyActivityA</string>
+    <string name="title_activity_alert_full">AlertFull</string>
 
     <string name="app_id">1518663588347715</string>
 

@@ -4,15 +4,76 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.faizmalkani.floatingactionbutton.FloatingActionButton;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class AlarmActivity extends Activity {
 
+    private TextView timer_text = (TextView) findViewById(R.id.timer_text);
+    public int tentime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
+
+        tentime = 10;
+        //Timer
+        Timer timer = new Timer();
+
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                TimerMethod();
+            }
+        }, 0, 1000);
+
+
+        //FAB
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.post_cancel);
+        fab.setColor(getResources().getColor(R.color.red));
+        fab.setDrawable(getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
+
+    private void TimerMethod()
+    {
+        //This method is called directly by the timer
+        //and runs in the same thread as the timer.
+
+        //We call the method that will work with the UI
+        //through the runOnUiThread method.
+        this.runOnUiThread(TimerTick);
+    }
+
+
+    private Runnable TimerTick = new Runnable() {
+        public void run() {
+            if (tentime!=1) {
+                timer_text.setText(String.valueOf(tentime--));
+            }
+            else {
+                //TODO: POST about new Alarm
+            }
+
+            //This method runs in the same thread as the UI.
+
+            //Do something to the UI thread here
+
+        }
+    };
 
 
     @Override
