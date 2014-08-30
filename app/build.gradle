@@ -25,4 +25,5 @@ dependencies {
     // leave 5.0.89 for compatability
     compile 'com.google.android.gms:play-services:5.0.89'
     compile project(':facebook')
+    compile project(':FloatingActionButton')
 }
