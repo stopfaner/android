@@ -3,7 +3,7 @@ package kpi.ua.auttaa;
 import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,13 +26,13 @@ public class MainActivity extends Activity {
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-        findViewById(R.id.btnfoo).setOnClickListener(new View.OnClickListener() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable(){
             @Override
-            public void onClick(View view) {
+            public void run(){
                 moveToLocation();
             }
-        });
-        moveToLocation();
+        }, 1000); //delay to wait while map is loading
     }
 
     private void moveToLocation() {
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
             double lattitude = myLocation.getLatitude();
             double longitude = myLocation.getLongitude();
 
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lattitude, longitude), 10));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lattitude, longitude), 13.5f));
         }
     }
 }
