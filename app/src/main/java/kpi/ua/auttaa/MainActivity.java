@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
         // There is floating actionButton initialization
         FloatingActionButton alarmFloatingButton = (FloatingActionButton) findViewById(R.id.button_alarm);
         alarmFloatingButton.setColor(getResources().getColor(R.color.pink_900));
-        alarmFloatingButton.setDrawable(getResources().getDrawable(android.R.drawable.ic_menu_add));
+        alarmFloatingButton.setDrawable(getResources().getDrawable(R.drawable.ic_action_alarm));
         alarmFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
             }
         });
 
-
+        //Map configuration
         googleMap = ((MapFragment)getFragmentManager().findFragmentById(R.id.map_fragment)).getMap();
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.setMyLocationEnabled(true);
