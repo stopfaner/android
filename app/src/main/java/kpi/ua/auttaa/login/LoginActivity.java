@@ -1,6 +1,5 @@
 package kpi.ua.auttaa.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +22,7 @@ public class LoginActivity extends FragmentActivity {
 
     public static final String IS_USER_LOGGED_IN = "IS_USER_LOGGED_IN";
     public static final String SECRET_STRING = "SECRET_STRING";
+    public static final String USER_ID = "USER_ID";
 
 
     private LoginButton loginButton;
@@ -44,11 +44,12 @@ public class LoginActivity extends FragmentActivity {
                 if (user != null) {
                     //TODO: generate secret string!
                     String secretString = "veryfuckingsecretstring";
+                    String userId = user.getId();
 
-                    SharedPreferences prefs = LoginActivity.this.getSharedPreferences("kpi.ua.auttaa", Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean(IS_USER_LOGGED_IN, true).putString(SECRET_STRING, secretString).apply();
-
-                    Toast.makeText(getApplicationContext(), "Hi, "+user.getUsername(), Toast.LENGTH_SHORT).show();
+                    SharedPreferences prefs = LoginActivity.this.getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
+                    prefs.edit().putBoolean(IS_USER_LOGGED_IN, true).putString(SECRET_STRING, secretString).putString(USER_ID, userId).apply();
+                    Toast.makeText(getApplicationContext(), "Hi, " + userId, Toast.LENGTH_SHORT).show();
+                    LoginActivity.this.finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "You are not logged in", Toast.LENGTH_SHORT).show();
                 }

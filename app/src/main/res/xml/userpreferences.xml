@@ -2,7 +2,14 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
-        android:key="PREF_"/>
+        android:key="PREF_UPD_FREQ"
+        android:title="@string/pref_upd_freq_title"
+        android:summary="@string/pref_upd_freq_summary"
+        android:entries="@array/pref_upd_freq_entries"
+        android:entryValues="@array/pref_upd_freq_values"
+        android:dialogTitle="@string/pref_upd_freq_dialog_title"
+        android:defaultValue="2"/>
+
 
 
 </PreferenceScreen>

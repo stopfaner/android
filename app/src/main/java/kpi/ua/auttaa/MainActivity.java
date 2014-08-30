@@ -1,10 +1,13 @@
 package kpi.ua.auttaa;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,12 +25,15 @@ import kpi.ua.auttaa.login.LoginActivity;
 
 public class MainActivity extends Activity {
 
+    public int updateFreq = 2;
+    public static final int SHOW_PREFERENCES = 0;
+
     private GoogleMap googleMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        updateFromPreferences();
         //
 
         setContentView(R.layout.activity_main);
@@ -76,14 +82,24 @@ public class MainActivity extends Activity {
                 moveToLocation();
                 return true;
             case R.id.action_settings:
-                //TODO: launch settings activity
+                Intent settingsIntent = new Intent(MainActivity.this, PreferencesActivity.class);
+                startActivityForResult(settingsIntent, SHOW_PREFERENCES);
                 return true;
             case R.id.action_login:
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SHOW_PREFERENCES) {
+            updateFromPreferences();
         }
     }
 
@@ -98,6 +114,13 @@ public class MainActivity extends Activity {
         double longitude = myLocation.getLongitude();
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lattitude, longitude), 13.5f));
+    }
+
+    private void updateFromPreferences() {
+        Context context = getApplicationContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        updateFreq = Integer.parseInt(prefs.getString(PreferencesActivity.PREF_UPD_FREQ, "2"));
+
     }
 }
 
