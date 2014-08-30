@@ -1,15 +1,21 @@
 package kpi.ua.auttaa;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import kpi.ua.auttaa.login.LoginActivity;
 
 
 public class MainActivity extends Activity {
@@ -33,6 +39,32 @@ public class MainActivity extends Activity {
                 moveToLocation();
             }
         }, 1000); //delay to wait while map is loading
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int choice = item.getItemId();
+        switch (choice) {
+            case R.id.action_locate:
+                moveToLocation();
+                return true;
+            case R.id.action_settings:
+                //TODO: launch settings activity
+                return true;
+            case R.id.action_login:
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void moveToLocation() {
