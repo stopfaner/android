@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="body_text_1_inverse">#000000</color>
+    <color name="pink_900">#880e4f</color>
+    <color name="purple_900">#4a148c</color>
 </resources>

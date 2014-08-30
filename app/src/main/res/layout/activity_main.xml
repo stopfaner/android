@@ -11,5 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.MapFragment"/>
+    <com.faizmalkani.floatingactionbutton.FloatingActionButton
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:id="@+id/start_alarm"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"/>
 
 </FrameLayout>
