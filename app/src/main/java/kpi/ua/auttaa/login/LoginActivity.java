@@ -1,110 +1,85 @@
 package kpi.ua.auttaa.login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
-import com.facebook.android.Util;
-
-import org.json.JSONObject;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 
 import kpi.ua.auttaa.R;
-
 /**
  * A login screen that offers login via email/password.
 
  */
-public class LoginActivity extends Activity {
-
-    public static String mAPP_ID;
-    public Facebook mFacebook = new Facebook(mAPP_ID);
+public class LoginActivity extends FragmentActivity {
+    private LoginButton loginButton;
+    private UiLifecycleHelper uiHelper;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAPP_ID = getResources().getString(R.string.app_id);
+        uiHelper = new UiLifecycleHelper(this, statusCallback);
+        uiHelper.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
-        ((Button)findViewById(R.id.authButton)).setOnClickListener( loginButtonListener );
-        SessionStore.restore(mFacebook, this);
-    }
 
+        loginButton = (LoginButton) findViewById(R.id.authButton);
 
-    //***********************************************************
-    // onActivityResult
-    //***********************************************************
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mFacebook.authorizeCallback(requestCode, resultCode, data);
-    }
-
-
-    //----------------------------------------------
-    // loginButtonListener
-    //----------------------------------------------
-    private View.OnClickListener loginButtonListener = new View.OnClickListener() {
-        public void onClick( View v ) {
-            if( !mFacebook.isSessionValid() ) {
-                Toast.makeText(LoginActivity.this, "Authorizing", Toast.LENGTH_SHORT).show();
-                mFacebook.authorize(LoginActivity.this, new String[] { "" }, new LoginDialogListener());
+        loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                if (user != null) {
+                    Toast.makeText(getApplicationContext(), "Hi, "+user.getUsername(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "You are not logged in", Toast.LENGTH_SHORT).show();
+                }
             }
-            else {
-                Toast.makeText( LoginActivity.this, "Has valid session", Toast.LENGTH_SHORT).show();
-                try {
-                    JSONObject json = Util.parseJson(mFacebook.request("me"));
-                    String facebookID = json.getString("id");
-                    String firstName = json.getString("first_name");
-                    String lastName = json.getString("last_name");
-                    Toast.makeText(LoginActivity.this, "You already have a valid session, " + firstName + " " + lastName + ". No need to re-authorize.", Toast.LENGTH_SHORT).show();
-                }
-                catch( Exception error ) {
-                    Toast.makeText( LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                }
+        });
+
+    }
+
+    private Session.StatusCallback statusCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state,
+                         Exception exception) {
+            if (state.isOpened()) {
+
+                Log.d("FacebookSampleActivity", "Facebook session opened");
+            } else if (state.isClosed()) {
+                Log.d("FacebookSampleActivity", "Facebook session closed");
             }
         }
     };
 
-
-    //***********************************************************************
-    //***********************************************************************
-    // LoginDialogListener
-    //***********************************************************************
-    //***********************************************************************
-    public final class LoginDialogListener implements Facebook.DialogListener {
-        public void onComplete(Bundle values) {
-            try {
-                //The user has logged in, so now you can query and use their Facebook info
-                JSONObject json = Util.parseJson(mFacebook.request("me"));
-                String facebookID = json.getString("id");
-                String firstName = json.getString("first_name");
-                String lastName = json.getString("last_name");
-                Toast.makeText( LoginActivity.this, "Thank you for Logging In, " + firstName + " " + lastName + "!", Toast.LENGTH_SHORT).show();
-                SessionStore.save(mFacebook, LoginActivity.this);
-            }
-            catch( Exception error ) {
-                Toast.makeText( LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        public void onFacebookError(FacebookError error) {
-            Toast.makeText( LoginActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
-        }
-
-        public void onError(DialogError error) {
-            Toast.makeText( LoginActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
-        }
-
-        public void onCancel() {
-            Toast.makeText( LoginActivity.this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
-        }
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+        uiHelper.onSaveInstanceState(savedState);
+    }
 }
 
 
