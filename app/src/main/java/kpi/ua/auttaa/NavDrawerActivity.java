@@ -2,17 +2,23 @@ package kpi.ua.auttaa;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import kpi.ua.auttaa.sections.AuttaaMapFragment;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 
-public class NavDrawerActivity extends Activity implements AuttaaMapFragment.OnFragmentInteractionListener,
-        NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class NavDrawerActivity extends Activity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -24,8 +30,10 @@ public class NavDrawerActivity extends Activity implements AuttaaMapFragment.OnF
      */
     private CharSequence mTitle;
 
-    private int activeSection;
+    private int activeSection = -1;
+    private GoogleMap displayedMap;
 
+    private Fragment[] usedFragments = new Fragment[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,20 +54,39 @@ public class NavDrawerActivity extends Activity implements AuttaaMapFragment.OnF
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        displayedMap = ((MapFragment) usedFragments[0]).getMap();
+        displayedMap.getUiSettings().setZoomControlsEnabled(false);
+        displayedMap.setMyLocationEnabled(true);
+        moveToLocation();
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        if (position == activeSection) {
+            return;
+        }
         switch (position) {
             case 0:
                 break;
-            case 1:
+            case 1:             //map
+                if (usedFragments[0] /*map*/ == null) {
+                    MapFragment mapFragment = MapFragment.newInstance();
+                    usedFragments[0] = mapFragment;
+                }
+
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, AuttaaMapFragment.newInstance(true))
+                        .replace(R.id.container, usedFragments[0])
                         .commit();
+
                 break;
             default:
                 break;
         }
+        activeSection = position;
     }
 
 
@@ -96,13 +123,21 @@ public class NavDrawerActivity extends Activity implements AuttaaMapFragment.OnF
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSignalize() {
-        //TODO: ALARM ALERT SOS HELP
-    }
 
-    @Override
-    public void onInfoRequest(long eventId) {
-        //TODO: OPEN NEW ACTIVITY DEPENDING ON eventId
+    public void moveToLocation() {
+        Location myLocation = displayedMap.getMyLocation();
+        if(myLocation!=null)
+        {
+            double dLatitude = myLocation.getLatitude();
+            double dLongitude = myLocation.getLongitude();
+            Log.i("APPLICATION", " : " + dLatitude);
+            Log.i("APPLICATION", " : " + dLongitude);
+            displayedMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(dLatitude, dLongitude), 6));
+
+        }
+        else
+        {
+            Toast.makeText(this, "Unable to fetch the current location", Toast.LENGTH_SHORT).show();
+        }
     }
 }
