@@ -27,9 +27,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
-        <!-- META DATA -->
+        android:theme="@style/Theme.Auttaa" >
+<!-- META DATA -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBoKj9yohx1xNspVAMwoRq50pqAlNSqZ1g" />
@@ -40,7 +39,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <!-- ACTIVITIES -->
+<!--ACTIVITIES -->
 
         <activity
             android:name=".MainActivity"
@@ -52,25 +51,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.facebook.LoginActivity"/>
-        <activity android:name=".login.LoginActivity" />
+        <activity android:name="com.facebook.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".AlarmActivity"
+            android:name="kpi.ua.auttaa.AlarmActivity"
             android:label="@string/title_activity_alarm"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="kpi.ua.auttaa.MainActivity" />
         </activity>
-        <activity
-            android:name=".PreferencesActivity"
-            android:parentActivityName=".MainActivity" />
+        <activity android:name=".PreferencesActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+        />
         <activity
             android:name=".AlertFull"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_alert_full" >
         </activity>
 
-        <!-- SERVICES AND RECEIVERS -->
+<!-- SERVICES AND RECEIVERS -->
 
         <service
             android:name=".update.AuttaaUpdateService"
@@ -81,14 +85,10 @@
                 <action android:name="kpi.ua.auttaa.update.ACTION_UPDATE_AUTTAA" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".widget.AlertWidget" >
+        <receiver android:name="kpi.ua.auttaa.widget.AlertWidget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/alert_widget_info" />
         </receiver>
     </application>
 

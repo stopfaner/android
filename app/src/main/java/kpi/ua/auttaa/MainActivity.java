@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 
 import kpi.ua.auttaa.login.LoginActivity;
+import kpi.ua.auttaa.login.SessionStore;
 import kpi.ua.auttaa.update.AuttaaUpdateService;
 
 
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 
     public double updateFreq = 0.25;
     public static final int SHOW_PREFERENCES = 0;
+    public static final int SHOW_LOGIN = 1;
 
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
@@ -43,6 +45,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", Context.MODE_PRIVATE);
+        if (!prefs.contains(LoginActivity.IS_USER_LOGGED_IN) || !prefs.getBoolean(LoginActivity.IS_USER_LOGGED_IN, false)) {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivityForResult(loginIntent, SHOW_LOGIN);
+        }
+
         updateFromPreferences();
         //
 
@@ -133,9 +142,11 @@ public class MainActivity extends Activity {
                 Intent settingsIntent = new Intent(MainActivity.this, PreferencesActivity.class);
                 startActivityForResult(settingsIntent, SHOW_PREFERENCES);
                 return true;
-            case R.id.action_login:
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+            case R.id.action_logout:
+                SessionStore.clear(getApplicationContext());
+                SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
+                prefs.edit().clear().apply();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -148,6 +159,11 @@ public class MainActivity extends Activity {
 
         if (requestCode == SHOW_PREFERENCES) {
             updateFromPreferences();
+        } else if (requestCode == SHOW_LOGIN) {
+            SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", Context.MODE_PRIVATE);
+            if (!prefs.contains(LoginActivity.IS_USER_LOGGED_IN) || !prefs.getBoolean(LoginActivity.IS_USER_LOGGED_IN, false)) {
+                finish();
+            }
         }
     }
 
