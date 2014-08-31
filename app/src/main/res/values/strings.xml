@@ -4,7 +4,7 @@
     <string name="app_name">Auttaa</string>
     <string name="action_settings">Settings</string>
     <string name="action_locate">Locate</string>
-    <string name="action_login">Log in</string>
+    <string name="action_logout">Log out and exit</string>
     <string name="location_invalid">Cannot locate you</string>
     <string name="title_activity_alarm">Alarm</string>
     <string name="hello_world">Hello world!</string>

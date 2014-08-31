@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONArray;
 
 import kpi.ua.auttaa.login.LoginActivity;
+import kpi.ua.auttaa.login.SessionStore;
 import kpi.ua.auttaa.update.AuttaaUpdateService;
 
 
@@ -141,9 +142,11 @@ public class MainActivity extends Activity {
                 Intent settingsIntent = new Intent(MainActivity.this, PreferencesActivity.class);
                 startActivityForResult(settingsIntent, SHOW_PREFERENCES);
                 return true;
-            case R.id.action_login:
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+            case R.id.action_logout:
+                SessionStore.clear(getApplicationContext());
+                SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
+                prefs.edit().clear().apply();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

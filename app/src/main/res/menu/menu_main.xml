@@ -8,9 +8,7 @@
         android:title="@string/action_locate"
         android:icon="@android:drawable/ic_menu_compass"
         android:showAsAction="ifRoom" />
-
-    <!--debug-->
-    <item android:id="@+id/action_login"
-        android:title="@string/action_login"
+    <item android:id="@+id/action_logout"
+        android:title="@string/action_logout"
         android:showAsAction="never"/>
 </menu>
