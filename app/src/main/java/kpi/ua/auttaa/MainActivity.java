@@ -22,6 +22,7 @@ import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -82,7 +83,7 @@ public class MainActivity extends Activity {
 
 
 
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude+", "+lonitude));
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude + ", " + lonitude).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_mark)));
                     }
                 } catch (Exception ex) {
                     Log.e(MainActivity.this.getClass().getName(), ex.getMessage(), ex);
