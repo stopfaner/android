@@ -24,7 +24,7 @@ public class AlarmActivity extends Activity {
         timer_text = (TextView) findViewById(R.id.timer_text);
         tentime = 10;
         //Timer
-        Timer timer = new Timer();
+        final Timer timer = new Timer();
 
 
         timer.schedule(new TimerTask() {
@@ -42,6 +42,7 @@ public class AlarmActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                timer.cancel();
                 finish();
             }
         });
@@ -65,7 +66,7 @@ public class AlarmActivity extends Activity {
                 timer_text.setText(String.valueOf(tentime--));
             }
             else {
-                //TODO: POST about new Alarm
+
                 finish();
             }
 

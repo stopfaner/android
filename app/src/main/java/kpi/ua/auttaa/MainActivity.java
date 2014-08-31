@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +23,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 import kpi.ua.auttaa.login.LoginActivity;
 import kpi.ua.auttaa.update.AuttaaUpdateService;
@@ -51,10 +54,9 @@ public class MainActivity extends Activity {
         alarmFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "AlarmButton clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "AlarmButton clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
                 startActivity(intent);
-                //TODO: Send ALARM NOW!!!!
             }
         });
 
@@ -69,12 +71,22 @@ public class MainActivity extends Activity {
             public void onReceive(Context context, Intent intent) {
                 String jsonString = intent.getStringExtra(AuttaaUpdateService.AUS_RESULT);
                 try {
-                    JSONObject data = new JSONObject(jsonString);
-                } catch (Exception ex) {
-                    Log.e
-                }
+                    JSONArray data = new JSONArray(jsonString);
+                    googleMap.clear();
+                    for (int i = 0; i < data.length(); i++) {
+                        String coordString = data.getString(i);
 
-                googleMap.clear();
+                        String[] coords = coordString.split(",");
+                        double latitude = Double.parseDouble(coords[0]);
+                        double lonitude = Double.parseDouble(coords[1]);
+
+
+
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude+", "+lonitude));
+                    }
+                } catch (Exception ex) {
+                    Log.e(MainActivity.this.getClass().getName(), ex.getMessage(), ex);
+                }
 
             }
         };
@@ -85,9 +97,21 @@ public class MainActivity extends Activity {
             public void run(){
                 moveToLocation();
             }
-        }, 1000); //delay to wait while map is loading
+        }, 1700); //delay to wait while map is loading
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(AuttaaUpdateService.AUS_RESULT));
+    }
+
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+        super.onStop();
     }
 
     @Override
