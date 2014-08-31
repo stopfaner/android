@@ -1,6 +1,7 @@
 package kpi.ua.auttaa;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,15 +22,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONObject;
+
 import kpi.ua.auttaa.login.LoginActivity;
+import kpi.ua.auttaa.update.AuttaaUpdateService;
 
 
 public class MainActivity extends Activity {
 
-    public int updateFreq = 2;
+    public double updateFreq = 0.25;
     public static final int SHOW_PREFERENCES = 0;
 
     private GoogleMap googleMap;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "AlarmButton clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                startActivity(intent);
                 //TODO: Send ALARM NOW!!!!
             }
         });
@@ -55,6 +63,21 @@ public class MainActivity extends Activity {
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String jsonString = intent.getStringExtra(AuttaaUpdateService.AUS_RESULT);
+                try {
+                    JSONObject data = new JSONObject(jsonString);
+                } catch (Exception ex) {
+                    Log.e
+                }
+
+                googleMap.clear();
+
+            }
+        };
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable(){
@@ -119,8 +142,11 @@ public class MainActivity extends Activity {
     private void updateFromPreferences() {
         Context context = getApplicationContext();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        updateFreq = Integer.parseInt(prefs.getString(PreferencesActivity.PREF_UPD_FREQ, "2"));
+        updateFreq = Double.parseDouble(prefs.getString(PreferencesActivity.PREF_UPD_FREQ, "0.25"));
 
+        startService(new Intent(MainActivity.this, AuttaaUpdateService.class));
     }
+
+
 }
 

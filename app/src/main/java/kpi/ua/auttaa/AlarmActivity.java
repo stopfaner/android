@@ -15,13 +15,13 @@ import java.util.TimerTask;
 
 public class AlarmActivity extends Activity {
 
-    private TextView timer_text = (TextView) findViewById(R.id.timer_text);
+    private TextView timer_text;
     public int tentime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
-
+        timer_text = (TextView) findViewById(R.id.timer_text);
         tentime = 10;
         //Timer
         Timer timer = new Timer();
@@ -61,11 +61,12 @@ public class AlarmActivity extends Activity {
 
     private Runnable TimerTick = new Runnable() {
         public void run() {
-            if (tentime!=1) {
+            if (tentime!=0) {
                 timer_text.setText(String.valueOf(tentime--));
             }
             else {
                 //TODO: POST about new Alarm
+                finish();
             }
 
             //This method runs in the same thread as the UI.
