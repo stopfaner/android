@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,10 +15,12 @@ import android.widget.TextView;
 
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +31,7 @@ public class AlarmActivity extends Activity {
 
     private TextView timer_text;
     public int tentime;
+    private Timer timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +39,7 @@ public class AlarmActivity extends Activity {
         timer_text = (TextView) findViewById(R.id.timer_text);
         tentime = 10;
         //Timer
-        final Timer timer = new Timer();
+        timer = new Timer();
 
 
         timer.schedule(new TimerTask() {
@@ -77,6 +81,7 @@ public class AlarmActivity extends Activity {
                 timer_text.setText(String.valueOf(tentime--));
             }
             else {
+                sendEvent();
                 finish();
             }
 
@@ -126,13 +131,43 @@ public class AlarmActivity extends Activity {
         String secretString = prefs.getString(LoginActivity.SECRET_STRING, "");
 
         try {
-            HttpGet get = new HttpGet();
-            StringBuilder querry = new StringBuilder("http://php-auttaa-rhcloud.com/?method=set_event&user_id=");
+            StringBuilder querry = new StringBuilder("http://php-auttaa.rhcloud.com/?method=set_event&user_id=");
             querry.append(userId).append("&token=").append(secretString).append("&crd=").append(lattitude).append(',').append(longitude);
-            HttpClient httpClient = new DefaultHttpClient();
-            HttpGet httpGet = new HttpGet(querry.toString());
+            connectWithHttpGet(querry.toString());
         } catch (Exception e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
+        timer.cancel();
     }
+
+
+    private void connectWithHttpGet(String querry) {
+        System.out.println("service-connectWithHttpGet");
+
+        class HttpGetAsyncTask extends AsyncTask<String, Void, String> {
+            @Override
+            protected String doInBackground(String... params) {
+                String querryX = params[0];
+                System.out.println(querryX);
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpGet httpGet = new HttpGet(querryX);
+
+                try {
+                    httpClient.execute(httpGet);
+                    return null;
+                } catch (ClientProtocolException cpe) {
+                    System.out.println("Exception generates caz of httpResponse :" + cpe);
+                    cpe.printStackTrace();
+                } catch (IOException ioe) {
+                    System.out.println("Second exception generates caz of httpResponse :" + ioe);
+                    ioe.printStackTrace();
+                }
+                return null;
+            }
+        }
+
+        HttpGetAsyncTask httpGetAsyncTask = new HttpGetAsyncTask();
+        httpGetAsyncTask.execute(querry);
+    }
+
 }

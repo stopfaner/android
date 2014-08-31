@@ -71,6 +71,7 @@
         <activity
             android:name=".AlertFull"
             android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_alert_full" >
         </activity>
 

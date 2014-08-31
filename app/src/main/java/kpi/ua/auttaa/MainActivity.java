@@ -24,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -92,7 +93,16 @@ public class MainActivity extends Activity {
 
 
 
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude + ", " + lonitude).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_mark)));
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude + "," + lonitude).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_mark)));
+                        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(Marker marker) {
+                                Intent alertfullIntent = new Intent(MainActivity.this, AlertFull.class);
+                                alertfullIntent.putExtra("COORDS", marker.getTitle());
+                                startActivity(alertfullIntent);
+                                return true;
+                            }
+                        });
                     }
                 } catch (Exception ex) {
                     Log.e(MainActivity.this.getClass().getName(), ex.getMessage(), ex);
