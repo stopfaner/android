@@ -76,14 +76,19 @@
 
 <!-- SERVICES AND RECEIVERS -->
 
-        <service android:enabled="true" android:name="kpi.ua.auttaa.update.AuttaaUpdateService"/>
-        <receiver android:name="kpi.ua.auttaa.update.AuttaaAlarmReciever">
+        <service
+            android:name=".update.AuttaaUpdateService"
+            android:enabled="true" />
+
+        <receiver android:name=".update.AuttaaAlarmReciever" >
             <intent-filter>
-                <action
-                    android:name="kpi.ua.auttaa.update.ACTION_UPDATE_AUTTAA"
-                    />
+                <action android:name="kpi.ua.auttaa.update.ACTION_UPDATE_AUTTAA" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".widget.AlertWidget" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
     </application>
 

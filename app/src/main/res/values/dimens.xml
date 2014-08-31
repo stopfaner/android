@@ -9,5 +9,7 @@
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>
     <dimen name="navdrawer_chosen_account_height">120dp</dimen>
+    <dimen name="map_marin_bottom">100dp</dimen>
+    <dimen name="widget_margin">8dp</dimen>
 
 </resources>
