@@ -1,7 +1,12 @@
 package kpi.ua.auttaa;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,8 +14,14 @@ import android.widget.TextView;
 
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.util.Timer;
 import java.util.TimerTask;
+
+import kpi.ua.auttaa.login.LoginActivity;
 
 
 public class AlarmActivity extends Activity {
@@ -66,7 +77,6 @@ public class AlarmActivity extends Activity {
                 timer_text.setText(String.valueOf(tentime--));
             }
             else {
-
                 finish();
             }
 
@@ -95,5 +105,34 @@ public class AlarmActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendEvent() {
+        LocationManager locationManager;
+        String svcName = Context.LOCATION_SERVICE;
+        locationManager = (LocationManager)getSystemService(svcName);
+        String provider = LocationManager.GPS_PROVIDER;
+        Location l = locationManager.getLastKnownLocation(provider);
+
+        if (l == null) {
+            return;
+        }
+
+        double lattitude = l.getLatitude();
+        double longitude = l.getLongitude();
+
+        SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
+        String userId = prefs.getString(LoginActivity.USER_ID, "-1");
+        String secretString = prefs.getString(LoginActivity.SECRET_STRING, "");
+
+        try {
+            HttpGet get = new HttpGet();
+            StringBuilder querry = new StringBuilder("http://php-auttaa-rhcloud.com/?method=set_event&user_id=");
+            querry.append(userId).append("&token=").append(secretString).append("&crd=").append(lattitude).append(',').append(longitude);
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpGet httpGet = new HttpGet(querry.toString());
+        } catch (Exception e) {
+            Log.e(this.getClass().getName(), e.getMessage(), e);
+        }
     }
 }
