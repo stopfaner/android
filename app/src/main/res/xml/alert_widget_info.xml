@@ -6,6 +6,6 @@
     android:previewImage="@drawable/example_appwidget_preview"
     android:initialLayout="@layout/alert_widget"
     android:resizeMode="horizontal|vertical"
-    android:widgetCategory="keyguard"
+    android:widgetCategory="keyguard|home_screen"
     android:initialKeyguardLayout="@layout/alert_widget">
 </appwidget-provider>
