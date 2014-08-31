@@ -55,6 +55,7 @@ public class AuttaaUpdateService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        //TODO: if not launching, comment next line
         sendData();
     }
 
@@ -64,9 +65,11 @@ public class AuttaaUpdateService extends IntentService {
         String svcName = Context.LOCATION_SERVICE;
         locationManager = (LocationManager)getSystemService(svcName);
         String provider = LocationManager.GPS_PROVIDER;
+
         Location l = locationManager.getLastKnownLocation(provider);
 
-        double lattitude = l.getLatitude();
+
+        double latitude = l.getLatitude();
         double longitude = l.getLongitude();
 
         SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
@@ -76,11 +79,13 @@ public class AuttaaUpdateService extends IntentService {
         try {
             HttpGet get = new HttpGet();
             StringBuilder querry = new StringBuilder(URL + "/?method=get_coordinates&user_id=");
-            querry.append(userId).append("&token=").append(secretString).append("&crd=").append(lattitude).append(',').append(longitude);
+            querry.append(userId).append("&token=").append(secretString).append("&crd=").append(latitude).append(',').append(longitude);
             connectWithHttpGet(querry.toString());
         } catch (Exception e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
+
+
     }
 
 

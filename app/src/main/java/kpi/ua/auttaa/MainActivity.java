@@ -54,7 +54,6 @@ public class MainActivity extends Activity {
             startActivityForResult(loginIntent, SHOW_LOGIN);
         }
 
-        updateFromPreferences();
         //
 
         setContentView(R.layout.activity_main);
@@ -123,8 +122,9 @@ public class MainActivity extends Activity {
             @Override
             public void run(){
                 moveToLocation();
+                updateFromPreferences();
             }
-        }, 1700); //delay to wait while map is loading
+        }, 2000); //delay to wait while map is loading
 
 
     }
