@@ -10,7 +10,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_my">MyActivityA</string>
     <string name="title_activity_alert_full">AlertFull</string>
+
     <string name="app_id">1518663588347715</string>
+
     <string name="pref_upd_freq_title">Update Frequency</string>
     <string name="pref_upd_freq_summary">Time within which your location updated</string>
     <string name="pref_upd_freq_dialog_title">Select timeout</string>

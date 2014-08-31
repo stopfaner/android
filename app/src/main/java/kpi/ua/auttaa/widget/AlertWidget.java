@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import kpi.ua.auttaa.AlarmActivity;
 import kpi.ua.auttaa.R;
@@ -38,16 +39,14 @@ public class AlertWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
             int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.alert_widget);
 
         Intent intent = new Intent(context, AlarmActivity.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                0, intent, 0);
         views.setOnClickPendingIntent(R.id.widget_start, pendingIntent);
-        // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+        Toast.makeText(context,"Added widet", Toast.LENGTH_SHORT).show();
     }
 }
 
