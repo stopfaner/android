@@ -2,7 +2,7 @@
 <resources>
     <string-array
         name="pref_upd_freq_entries">
-        <item>Every 25 sec</item>
+        <item>Every 15 sec</item>
         <item>Every minute</item>
         <item>Every 2 min</item>
         <item>Every 5 min</item>

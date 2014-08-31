@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kpi.ua.auttaa.AlarmActivity"
-    android:background="@color/red700">
+    android:background="@color/red400">
 
     <ImageView
         android:layout_width="150dp"

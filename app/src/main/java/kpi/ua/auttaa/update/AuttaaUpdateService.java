@@ -66,10 +66,6 @@ public class AuttaaUpdateService extends IntentService {
         String provider = LocationManager.GPS_PROVIDER;
         Location l = locationManager.getLastKnownLocation(provider);
 
-        if (l == null) {
-            return;
-        }
-
         double lattitude = l.getLatitude();
         double longitude = l.getLongitude();
 

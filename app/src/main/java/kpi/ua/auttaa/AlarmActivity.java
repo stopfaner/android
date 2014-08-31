@@ -1,10 +1,7 @@
 package kpi.ua.auttaa;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,9 +29,18 @@ public class AlarmActivity extends Activity {
     private TextView timer_text;
     public int tentime;
     private Timer timer;
+
+    private double lat, lng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        String coords = getIntent().getStringExtra("COORDS");
+        String[] latlng = coords.split(",");
+
+        lat = Double.parseDouble(latlng[0]);
+        lng = Double.parseDouble(latlng[1]);
+
         setContentView(R.layout.activity_alarm);
         timer_text = (TextView) findViewById(R.id.timer_text);
         tentime = 10;
@@ -81,6 +87,7 @@ public class AlarmActivity extends Activity {
                 timer_text.setText(String.valueOf(tentime--));
             }
             else {
+                timer.cancel();
                 sendEvent();
                 finish();
             }
@@ -113,18 +120,7 @@ public class AlarmActivity extends Activity {
     }
 
     private void sendEvent() {
-        LocationManager locationManager;
-        String svcName = Context.LOCATION_SERVICE;
-        locationManager = (LocationManager)getSystemService(svcName);
-        String provider = LocationManager.GPS_PROVIDER;
-        Location l = locationManager.getLastKnownLocation(provider);
-
-        if (l == null) {
-            return;
-        }
-
-        double lattitude = l.getLatitude();
-        double longitude = l.getLongitude();
+        System.out.println("Alarm-Activity--sendEvent");
 
         SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
         String userId = prefs.getString(LoginActivity.USER_ID, "-1");
@@ -132,12 +128,12 @@ public class AlarmActivity extends Activity {
 
         try {
             StringBuilder querry = new StringBuilder("http://php-auttaa.rhcloud.com/?method=set_event&user_id=");
-            querry.append(userId).append("&token=").append(secretString).append("&crd=").append(lattitude).append(',').append(longitude);
+            querry.append(userId).append("&token=").append(secretString).append("&crd=").append(lat).append(',').append(lng);
+            System.out.println("Querry: " + querry.toString());
             connectWithHttpGet(querry.toString());
         } catch (Exception e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
-        timer.cancel();
     }
 
 

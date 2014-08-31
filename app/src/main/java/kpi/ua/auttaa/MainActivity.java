@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 
+import kpi.ua.auttaa.login.DataClass;
 import kpi.ua.auttaa.login.LoginActivity;
 import kpi.ua.auttaa.login.SessionStore;
 import kpi.ua.auttaa.update.AuttaaUpdateService;
@@ -67,6 +68,12 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 //Toast.makeText(getApplicationContext(), "AlarmButton clicked", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), AlarmActivity.class);
+                Location location = googleMap.getMyLocation();
+                if (location == null) {
+                    return;
+                }
+                String coords = location.getLatitude()+","+location.getLongitude();
+                intent.putExtra("COORDS", coords);
                 startActivity(intent);
             }
         });
@@ -89,11 +96,11 @@ public class MainActivity extends Activity {
 
                         String[] coords = coordString.split(",");
                         double latitude = Double.parseDouble(coords[0]);
-                        double lonitude = Double.parseDouble(coords[1]);
+                        double longitude = Double.parseDouble(coords[1]);
 
 
 
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, lonitude)).title(latitude + "," + lonitude).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_mark)));
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(latitude + "," + longitude).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_mark)));
                         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                             @Override
                             public boolean onMarkerClick(Marker marker) {
@@ -173,7 +180,11 @@ public class MainActivity extends Activity {
             SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", Context.MODE_PRIVATE);
             if (!prefs.contains(LoginActivity.IS_USER_LOGGED_IN) || !prefs.getBoolean(LoginActivity.IS_USER_LOGGED_IN, false)) {
                 finish();
+            } else {
+                DataClass.userId=prefs.getString(LoginActivity.USER_ID, "-1");
+                DataClass.secretToken=prefs.getString(LoginActivity.SECRET_STRING, "");
             }
+
         }
     }
 

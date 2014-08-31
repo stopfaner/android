@@ -43,8 +43,8 @@ public class LoginActivity extends FragmentActivity {
             public void onUserInfoFetched(GraphUser user) {
                 if (user != null) {
                     //TODO: generate secret string!
-                    String secretString = "veryfuckingsecretstring";
-                    String userId = user.getId();
+                    String secretString = DataClass.secretToken = "veryfuckingsecretstring";
+                    String userId = DataClass.userId = user.getId();
 
                     SharedPreferences prefs = LoginActivity.this.getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
                     prefs.edit().putBoolean(IS_USER_LOGGED_IN, true).putString(SECRET_STRING, secretString).putString(USER_ID, userId).apply();
