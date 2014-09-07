@@ -67,10 +67,12 @@ public class AuttaaUpdateService extends IntentService {
         String provider = LocationManager.GPS_PROVIDER;
 
         Location l = locationManager.getLastKnownLocation(provider);
-
-
-        double latitude = l.getLatitude();
-        double longitude = l.getLongitude();
+        double latitude = 0;
+        double longitude= 0;
+        if (l!=null) {
+            latitude  =   l.getLatitude();
+            longitude =   l.getLongitude();
+        }
 
         SharedPreferences prefs = getSharedPreferences("kpi.ua.auttaa", MODE_PRIVATE);
         String userId = prefs.getString(LoginActivity.USER_ID, "-1");

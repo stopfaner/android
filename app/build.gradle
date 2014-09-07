@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 20
+    compileSdkVersion 'android-L'
     buildToolsVersion '20.0.0'
 
     defaultConfig {
         applicationId "kpi.ua.auttaa"
-        minSdkVersion 17
-        targetSdkVersion 20
+        minSdkVersion 'L'
+        targetSdkVersion 'L'
         versionCode 1
         versionName "1.0"
     }
@@ -22,7 +22,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:20.0.0'
-    // leave 5.0.89 for compatability
     compile 'com.google.android.gms:play-services:5.0.89'
     compile project(':facebook')
     compile project(':FloatingActionButton')

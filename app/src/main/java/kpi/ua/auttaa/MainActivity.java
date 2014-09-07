@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 
         // There is floating actionButton initialization
         FloatingActionButton alarmFloatingButton = (FloatingActionButton) findViewById(R.id.button_alarm);
-        alarmFloatingButton.setColor(getResources().getColor(R.color.red700));
+        alarmFloatingButton.setColor(getResources().getColor(R.color.ascent));
         alarmFloatingButton.setDrawable(getResources().getDrawable(R.drawable.ic_allert));
         alarmFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
